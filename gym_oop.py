@@ -4,7 +4,7 @@ from typing import Dict, List, Optional
 from consolemenu import ConsoleMenu
 from consolemenu.items import FunctionItem
 
-class User:
+class User: #classes for loging in
     def __init__(my_object, username: str, password: str):
         my_object.username = username
         my_object.password = password
