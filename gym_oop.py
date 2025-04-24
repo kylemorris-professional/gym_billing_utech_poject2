@@ -5,65 +5,65 @@ from consolemenu import ConsoleMenu
 from consolemenu.items import FunctionItem
 
 class User: #classes for loging in
-    def __init__(my_object, username: str, password: str):
-        my_object.username = username
-        my_object.password = password
+    def __init__(self, username: str, password: str):
+        self.username = username
+        self.password = password
 
-class Member:
-    def __init__(my_object, member_id: str, first_name: str, last_name: str, 
+class Member: #
+    def __init__(self, member_id: str, first_name: str, last_name: str,
                  contact: str, membership_type: str, date: str):
-        my_object.member_id = member_id
-        my_object.first_name = first_name
-        my_object.last_name = last_name
-        my_object.contact = contact
-        my_object.membership_type = membership_type
-        my_object.date = date
+        self.member_id = member_id
+        self.first_name = first_name
+        self.last_name = last_name
+        self.contact = contact
+        self.membership_type = membership_type
+        self.date = date
     
-    def get_full_name(my_object) -> str:
-        return f"{my_object.first_name} {my_object.last_name}"
+    def get_full_name(self) -> str:
+        return f"{self.first_name} {self.last_name}"
 
 class Session:
-    def __init__(my_object, session_id: str, name: str, cost: int, schedule: str):
-        my_object.session_id = session_id
-        my_object.name = name
-        my_object.cost = cost
-        my_object.schedule = schedule
+    def __init__(self, session_id: str, name: str, cost: int, schedule: str):
+        self.session_id = session_id
+        self.name = name
+        self.cost = cost
+        self.schedule = schedule
 
 class CheckIn:
-    def __init__(my_object, member_id: str, timestamp: datetime):
-        my_object.member_id = member_id
-        my_object.timestamp = timestamp
-        my_object.sessions = []
+    def __init__(self, member_id: str, timestamp: datetime):
+        self.member_id = member_id
+        self.timestamp = timestamp
+        self.sessions = []
     
-    def add_session(my_object, session_id: str):
-        my_object.sessions.append(session_id)
+    def add_session(self, session_id: str):
+        self.sessions.append(session_id)
 
 class Instructor:
-    def __init__(my_object, instructor_id: str, first_name: str, last_name: str):
-        my_object.instructor_id = instructor_id
-        my_object.first_name = first_name
-        my_object.last_name = last_name
-        my_object.sessions = []
+    def __init__(self, instructor_id: str, first_name: str, last_name: str):
+        self.instructor_id = instructor_id
+        self.first_name = first_name
+        self.last_name = last_name
+        self.sessions = []
     
-    def get_full_name(my_object) -> str:
-        return f"{my_object.first_name} {my_object.last_name}"
+    def get_full_name(self) -> str:
+        return f"{self.first_name} {self.last_name}"
 
 class MembershipPlan:
-    def __init__(my_object, cost: int, included_sessions: int, discount: float):
-        my_object.cost = cost
-        my_object.included_sessions = included_sessions
-        my_object.discount = discount
+    def __init__(self, cost: int, included_sessions: int, discount: float):
+        self.cost = cost
+        self.included_sessions = included_sessions
+        self.discount = discount
 
 class GymOnTheRock:
-    def __init__(my_object):
-        my_object.users = {}  # username -> User object
-        my_object.members = {}  # member_id -> Member object
-        my_object.sessions = {}  # session_id -> Session object
-        my_object.check_ins = []  # List of CheckIn objects
-        my_object.instructors = []  # List of Instructor objects
-        my_object.login_attempts = {}  # username -> {attempts, lockout_time}
-        my_object.current_user = None
-        my_object.membership_plans = {
+    def __init__(self):
+        self.users = {}  # username -> User object
+        self.members = {}  # member_id -> Member object
+        self.sessions = {}  # session_id -> Session object
+        self.check_ins = []  # List of CheckIn objects
+        self.instructors = []  # List of Instructor objects
+        self.login_attempts = {}  # username -> {attempts, lockout_time}
+        self.current_user = None
+        self.membership_plans = {
             "Platinum": MembershipPlan(10000, 4, 0.15),
             "Diamond": MembershipPlan(7500, 2, 0.10),
             "Gold": MembershipPlan(4000, 1, 0.05),
@@ -71,21 +71,21 @@ class GymOnTheRock:
         }
         
         # Initialize with some sample data
-        my_object._initialize_sample_data()
+        self._initialize_sample_data()
     
-    def _initialize_sample_data(my_object):
+    def _initialize_sample_data(self):
         # Add a sample user
-        my_object.users["username"] = User("username", "username123")
+        self.users["username"] = User("username", "username123")
         
         # Add sample sessions
-        my_object.sessions["S01"] = Session("S01", "MA Classes", 1100, "Evening")
-        my_object.sessions["S02"] = Session("S02", "Spin Classes", 900, "Morning")
+        self.sessions["S01"] = Session("S01", "MA Classes", 1100, "Evening")
+        self.sessions["S02"] = Session("S02", "Spin Classes", 900, "Morning")
     
-    def signup(my_object) -> bool:
+    def signup(self) -> bool:
         print("\n [+]Welcome to Gym-On-The-Rock Sign Up ")
         username = input("[+]Please enter a username: ").strip()
         
-        if username in my_object.users:
+        if username in self.users:
             print("[+]Error 409: username already has already been stored")
             return False
         
@@ -109,11 +109,11 @@ class GymOnTheRock:
             return False
         
         # Add new user
-        my_object.users[username] = User(username, password)
+        self.users[username] = User(username, password)
         print("[+]Great, let's start your fitness journey")
         return True
     
-    def login(my_object) -> bool:
+    def login(self) -> bool:
         max_attempts = 3
         lockout_duration = timedelta(minutes=5)
         
@@ -122,10 +122,10 @@ class GymOnTheRock:
             username = input("[+]Enter username: ").strip()
             password = input("[+]Enter password: ").strip()
             
-            if username not in my_object.login_attempts:
-                my_object.login_attempts[username] = {"attempts": 0, "lockout_time": None}
+            if username not in self.login_attempts:
+                self.login_attempts[username] = {"attempts": 0, "lockout_time": None}
             
-            user_data = my_object.login_attempts[username]
+            user_data = self.login_attempts[username]
             
             if user_data["lockout_time"]:
                 if datetime.now() < user_data["lockout_time"]:
@@ -138,11 +138,11 @@ class GymOnTheRock:
                     user_data["lockout_time"] = None
             
             # Validate credentials
-            if username in my_object.users and my_object.users[username].password == password:
+            if username in self.users and self.users[username].password == password:
                 print("[+]login attempt successful")
                 # Reset attempt counter on successful login
                 user_data["attempts"] = 0
-                my_object.current_user = username
+                self.current_user = username
                 return True
             else:
                 user_data["attempts"] += 1
@@ -153,10 +153,10 @@ class GymOnTheRock:
                     print("[+]Too many failed attempts. The system will logout.")
                     return False
     
-    def generate_member_id(my_object) -> str:
-        return f"M{len(my_object.members)+1:04d}"
+    def generate_member_id(self) -> str:
+        return f"M{len(self.members) + 1:04d}"
     
-    def member_checkin(my_object) -> None:
+    def member_checkin(self) -> None:
         print("\n [+]Welcome to mem checkin :) ")
         
         while True:
@@ -165,18 +165,18 @@ class GymOnTheRock:
                 break
             print("[+]Error 2020: ID must be 5 characters eg. M0007")
         
-        if mem_id not in my_object.members:
+        if mem_id not in self.members:
             print("[+]Error 1006: Enter valid member ID")
             return
         
         checkin_time = datetime.now()
         new_checkin = CheckIn(mem_id, checkin_time)
-        my_object.check_ins.append(new_checkin)
+        self.check_ins.append(new_checkin)
         
-        print(f"[+]Welcome {my_object.members[mem_id].first_name}")
+        print(f"[+]Welcome {self.members[mem_id].first_name}")
         print("[+]You have the following sessions available: ")
         
-        for sid, session in my_object.sessions.items():
+        for sid, session in self.sessions.items():
             print(f"{sid} {session.name} - ${session.cost} ({session.schedule})")
         
         while True:
@@ -185,15 +185,15 @@ class GymOnTheRock:
             if usr_choice == "F":
                 break
                 
-            if usr_choice in my_object.sessions:
+            if usr_choice in self.sessions:
                 new_checkin.add_session(usr_choice)
-                print(f"[+]You registered for {my_object.sessions[usr_choice].name}")
+                print(f"[+]You registered for {self.sessions[usr_choice].name}")
             else:
                 print("[+]The session ID is invalid")
     
-    def add_member(my_object):
+    def add_member(self):
         print("\n[+]Let's add a new member ---")
-        mem_id = my_object.generate_member_id()
+        mem_id = self.generate_member_id()
         
         # Get first name
         while True:
@@ -234,22 +234,22 @@ class GymOnTheRock:
             datetime.now().strftime("%Y-%m-%d")
         )
         
-        my_object.members[mem_id] = new_member
+        self.members[mem_id] = new_member
         print(f"[+]You have successfully added member {mem_id}")
     
-    def manage_sessions(my_object):
+    def manage_sessions(self):
         print("\n [+]Session Management")
         print("[+]Following existing sessions:")
         
-        for sid, session in my_object.sessions.items():
+        for sid, session in self.sessions.items():
             print(f"[+][{sid}] {session.name} (${session.cost})")
-        
+
         user_prompt = input("\n1. Enter 1 to add new \n2. Enter 2 to update existing sessions: ").strip()
         
         if user_prompt == "1":
             # Generate new session ID
-            if my_object.sessions:
-                max_num = max(int(sid[1:]) for sid in my_object.sessions if sid.startswith("S") and sid[1:].isdigit())
+            if self.sessions:
+                max_num = max(int(sid[1:]) for sid in self.sessions if sid.startswith("S") and sid[1:].isdigit())
                 session_id = f"S{max_num + 1:02d}"
             else:
                 session_id = "S01"
@@ -261,14 +261,14 @@ class GymOnTheRock:
             
             # Create and store the new session
             new_session = Session(session_id, name, cost, schedule)
-            my_object.sessions[session_id] = new_session
+            self.sessions[session_id] = new_session
             print(f"[+]You have successfully added session {session_id}")
             
         elif user_prompt == "2":
             session_id = input("[+]Please enter session ID (e.g,S01): ").strip().upper()
             
-            if session_id in my_object.sessions:
-                session = my_object.sessions[session_id]
+            if session_id in self.sessions:
+                session = self.sessions[session_id]
                 print(f"[+]Your current info: {session.name} - ${session.cost} ({session.schedule})")
                 
                 # Update session details
@@ -281,41 +281,41 @@ class GymOnTheRock:
             else:
                 print("Error 1010: Invalid session ID")
     
-    def generate_reports(my_object):
+    def generate_reports(self):
         print("[+]Welcome to Sys reports")
         
         # List all members
         print("\n[+]List of all members and the total num of members:")
-        for mid, member in my_object.members.items():
+        for mid, member in self.members.items():
             print(f"[+]{mid}: {member.first_name} {member.last_name} ({member.membership_type})")
-        print(f"\nTotal number of members: {len(my_object.members)}")
+        print(f"\nTotal number of members: {len(self.members)}")
         
         # List all sessions
         print("\n[+]List of all classes and their schedule:")
-        for sid, session in my_object.sessions.items():
+        for sid, session in self.sessions.items():
             print(f"[+]{sid}: {session.name} - ${session.cost} ({session.schedule})")
         
         # Count members by type and calculate fees
         membership_counts = {"Platinum": 0, "Diamond": 0, "Gold": 0, "Standard": 0}
         membership_fees = {"Platinum": 0, "Diamond": 0, "Gold": 0, "Standard": 0}
         
-        for member in my_object.members.values():
+        for member in self.members.values():
             membership_type = member.membership_type
             membership_counts[membership_type] += 1
-            membership_fees[membership_type] += my_object.membership_plans[membership_type].cost
+            membership_fees[membership_type] += self.membership_plans[membership_type].cost
         
         print("\n[+]List of members for each membership type and total fees:")
         for membership_type, count in membership_counts.items():
             print(f"[+]{membership_type}: {count} members, Total fees: ${membership_fees[membership_type]}")
         
         # Calculate earnings per class
-        class_earnings = {sid: 0 for sid in my_object.sessions}
+        class_earnings = {sid: 0 for sid in self.sessions}
         print("\n[+]List of members registered for classes && total earnings:")
         
-        for checkin in my_object.check_ins:
+        for checkin in self.check_ins:
             for sid in checkin.sessions:
                 if sid in class_earnings:
-                    class_earnings[sid] += my_object.sessions[sid].cost
+                    class_earnings[sid] += self.sessions[sid].cost
         
         for sid, earnings in class_earnings.items():
             print(f"[+]{sid}: Total earnings: ${earnings}")
@@ -323,15 +323,15 @@ class GymOnTheRock:
         # Calculate total monthly fee per member
         print("\n[+]Report for each client with total monthly fee:")
         
-        for mid, member in my_object.members.items():
-            membership_plan = my_object.membership_plans[member.membership_type]
+        for mid, member in self.members.items():
+            membership_plan = self.membership_plans[member.membership_type]
             membership_cost = membership_plan.cost
             included_sessions = membership_plan.included_sessions
             discount = membership_plan.discount
             
             # Get all sessions for this member
             all_sessions = []
-            for checkin in my_object.check_ins:
+            for checkin in self.check_ins:
                 if checkin.member_id == mid:
                     all_sessions.extend(checkin.sessions)
             
@@ -340,8 +340,8 @@ class GymOnTheRock:
             if len(all_sessions) > included_sessions:
                 paid_sessions = all_sessions[included_sessions:]
                 for sid in paid_sessions:
-                    if sid in my_object.sessions:
-                        session_cost += my_object.sessions[sid].cost * (1 - discount)
+                    if sid in self.sessions:
+                        session_cost += self.sessions[sid].cost * (1 - discount)
             
             member_total = membership_cost + session_cost
             print(f"[+]{mid}: {member.first_name} {member.last_name}, Contact: {member.contact}, "
@@ -349,10 +349,10 @@ class GymOnTheRock:
         
         # List available sessions
         print("\n[+]You have the following existing sessions:")
-        for sid, session in my_object.sessions.items():
+        for sid, session in self.sessions.items():
             print(f"[+][{sid}] {session.name} (${session.cost})")
     
-    def add_instructor(my_object):
+    def add_instructor(self):
         print("\n[+]Add instructor ")
         
         instructors_list = [
@@ -381,18 +381,18 @@ class GymOnTheRock:
         first, last = selected.split()
         
         # Generate instructor ID
-        instructor_id = f"I{len(my_object.instructors)+1:03d}"
+        instructor_id = f"I{len(self.instructors) + 1:03d}"
         
         # Create and store new instructor
         new_instructor = Instructor(instructor_id, first, last)
-        my_object.instructors.append(new_instructor)
+        self.instructors.append(new_instructor)
         
         print(f"[+]Instructor {instructor_id} added: {selected}")
     
-    def display_main_menu(my_object):
+    def display_main_menu(self):
         # Display current user details if logged in
-        if my_object.current_user and my_object.current_user in my_object.users:
-            print(f"\nWelcome, {my_object.current_user}!")
+        if self.current_user and self.current_user in self.users:
+            print(f"\nWelcome, {self.current_user}!")
             
             # Find user's sessions and calculate total cost
             user_sessions = []
@@ -400,20 +400,20 @@ class GymOnTheRock:
             
             # Check if the current user is a member
             member_id = None
-            for mid, member in my_object.members.items():
-                if member.first_name.lower() == my_object.current_user.lower():
+            for mid, member in self.members.items():
+                if member.first_name.lower() == self.current_user.lower():
                     member_id = mid
                     break
             
             if member_id:
-                for checkin in my_object.check_ins:
+                for checkin in self.check_ins:
                     if checkin.member_id == member_id:
                         user_sessions.extend(checkin.sessions)
                 
                 if user_sessions:
                     print("[+]Registered sessions:")
                     for sid in user_sessions:
-                        session = my_object.sessions.get(sid)
+                        session = self.sessions.get(sid)
                         if session:
                             print(f"  - {session.name}: ${session.cost}")
                             total_cost += session.cost
@@ -428,11 +428,11 @@ class GymOnTheRock:
         )
         
         items = [
-            FunctionItem("\033[33mMember Check-in\033[0m", my_object.member_checkin),
-            FunctionItem("\033[32mAdd A Member(s)\033[0m", my_object.add_member),
-            FunctionItem("\033[34mManage Your Sessions\033[0m", my_object.manage_sessions),
-            FunctionItem("\033[35mAdd an Instructor\033[0m", my_object.add_instructor),
-            FunctionItem("\033[36mGenerate Your Reports\033[0m", my_object.generate_reports),
+            FunctionItem("\033[33mMember Check-in\033[0m", self.member_checkin),
+            FunctionItem("\033[32mAdd A Member(s)\033[0m", self.add_member),
+            FunctionItem("\033[34mManage Your Sessions\033[0m", self.manage_sessions),
+            FunctionItem("\033[35mAdd an Instructor\033[0m", self.add_instructor),
+            FunctionItem("\033[36mGenerate Your Reports\033[0m", self.generate_reports),
         ]
         
         for item in items:
@@ -440,7 +440,7 @@ class GymOnTheRock:
         
         menu.show()
     
-    def run(my_object):
+    def run(self):
         try:
             banner = r"""
    _____                        ____           _______ _                 _____            _
@@ -458,11 +458,11 @@ class GymOnTheRock:
             while True:
                 user_prompt = input("[+]Are you a member? you can become a member by selecting 1. Signing up or 2. Login: ")
                 
-                if user_prompt == "2" and my_object.login():
-                    my_object.display_main_menu()
+                if user_prompt == "2" and self.login():
+                    self.display_main_menu()
                     break
                 elif user_prompt == "1":
-                    my_object.signup()
+                    self.signup()
                 else:
                     print("Error 2003: Enter a valid option")
                     
