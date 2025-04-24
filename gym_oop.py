@@ -9,7 +9,7 @@ class User: #classes for loging in
         self.username = username
         self.password = password
 
-class Member: #
+class Member: #class with information about the members
     def __init__(self, member_id: str, first_name: str, last_name: str,
                  contact: str, membership_type: str, date: str):
         self.member_id = member_id
@@ -19,17 +19,17 @@ class Member: #
         self.membership_type = membership_type
         self.date = date
     
-    def get_full_name(self) -> str:
+    def get_full_name(self) -> str: #combines first and last name to give someone's full name
         return f"{self.first_name} {self.last_name}"
 
-class Session:
+class Session: #class for the session give you the name of the session like spin class cost and time if it in the day or night
     def __init__(self, session_id: str, name: str, cost: int, schedule: str):
         self.session_id = session_id
         self.name = name
         self.cost = cost
         self.schedule = schedule
 
-class CheckIn:
+class CheckIn: #information you would need when you check in at the front desk
     def __init__(self, member_id: str, timestamp: datetime):
         self.member_id = member_id
         self.timestamp = timestamp
@@ -38,14 +38,14 @@ class CheckIn:
     def add_session(self, session_id: str):
         self.sessions.append(session_id)
 
-class Instructor:
+class Instructor: #information on the person teaching the session
     def __init__(self, instructor_id: str, first_name: str, last_name: str):
         self.instructor_id = instructor_id
         self.first_name = first_name
         self.last_name = last_name
         self.sessions = []
     
-    def get_full_name(self) -> str:
+    def get_full_name(self) -> str:# combines first and last name to make full name
         return f"{self.first_name} {self.last_name}"
 
 class MembershipPlan:
@@ -63,7 +63,7 @@ class GymOnTheRock:
         self.instructors = []  # List of Instructor objects
         self.login_attempts = {}  # username -> {attempts, lockout_time}
         self.current_user = None
-        self.membership_plans = {
+        self.membership_plans = {  #give you the benefits you get from the different plans you might sign up to
             "Platinum": MembershipPlan(10000, 4, 0.15),
             "Diamond": MembershipPlan(7500, 2, 0.10),
             "Gold": MembershipPlan(4000, 1, 0.05),
@@ -91,20 +91,20 @@ class GymOnTheRock:
         
         password = input("[+]Enter a unique password: ").strip()
         
-        # Password validation
-        if len(password) < 6:
-            print("[+]Error 1001: pass is too short")
+        # Password rules
+        if len(password) < 6: #user must enter password with more than six characters
+            print("[+]Error 1001: password is too short must be more than six characters")
             return False
-        if not re.search(r"[A-Z]", password):
+        if not re.search(r"[A-Z]", password):# uses the regular expression module to make user has at least oen capital letter
             print("[+]Error 1002: pass must contain one uppercase")
             return False
-        if not re.search(r"[a-z]", password):
+        if not re.search(r"[a-z]", password):# ensure it has at least one common letter
             print("[+]Error 1003: pass must contain at least one lowercase")
             return False
-        if not re.search(r"\d", password):
+        if not re.search(r"\d", password): # unsure it has at least one digit
             print("[+]Error 1004: pass must contain one digit")
             return False
-        if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password):
+        if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password): #ensure it has at lease one special character
             print("[+]Error 1005: pass must contain one special char")
             return False
         
@@ -113,16 +113,16 @@ class GymOnTheRock:
         print("[+]Great, let's start your fitness journey")
         return True
     
-    def login(self) -> bool:
+    def login(self) -> bool: #this function allow it that after three attempts it locks you out for five minutes
         max_attempts = 3
         lockout_duration = timedelta(minutes=5)
         
-        while True:
+        while True: #promts user for user name and password and store it in variables
             print("[+]Start on your fitness journey, Login")
             username = input("[+]Enter username: ").strip()
             password = input("[+]Enter password: ").strip()
             
-            if username not in self.login_attempts:
+            if username not in self.login_attempts: #checks username
                 self.login_attempts[username] = {"attempts": 0, "lockout_time": None}
             
             user_data = self.login_attempts[username]
@@ -130,7 +130,7 @@ class GymOnTheRock:
             if user_data["lockout_time"]:
                 if datetime.now() < user_data["lockout_time"]:
                     remaining_lockout = user_data["lockout_time"] - datetime.now()
-                    print(f"Account locked. Try again in {remaining_lockout.seconds // 60} minutes and {remaining_lockout.seconds % 60} seconds.")
+                    print(f"Account locked. Try again in {remaining_lockout.seconds // 60} minutes and {remaining_lockout.seconds % 60} seconds.")#shows how much time left in your lock out if you get it wrong
                     continue
                 else:
                     # Reset lockout after duration has passed
@@ -153,19 +153,19 @@ class GymOnTheRock:
                     print("[+]Too many failed attempts. The system will logout.")
                     return False
     
-    def generate_member_id(self) -> str:
+    def generate_member_id(self) -> str:#gives you an id number
         return f"M{len(self.members) + 1:04d}"
     
     def member_checkin(self) -> None:
         print("\n [+]Welcome to mem checkin :) ")
         
         while True:
-            mem_id = input("[+]Please enter your five-digit ID: ").strip().upper()
+            mem_id = input("[+]Please enter your five-digit ID: ").strip().upper()#prompts user for id number
             if re.match(r"^M\d{4}$", mem_id):
                 break
             print("[+]Error 2020: ID must be 5 characters eg. M0007")
         
-        if mem_id not in self.members:
+        if mem_id not in self.members: #checks for members id
             print("[+]Error 1006: Enter valid member ID")
             return
         
@@ -173,7 +173,7 @@ class GymOnTheRock:
         new_checkin = CheckIn(mem_id, checkin_time)
         self.check_ins.append(new_checkin)
         
-        print(f"[+]Welcome {self.members[mem_id].first_name}")
+        print(f"[+]Welcome {self.members[mem_id].first_name}") #welcome message for user
         print("[+]You have the following sessions available: ")
         
         for sid, session in self.sessions.items():
@@ -191,28 +191,28 @@ class GymOnTheRock:
             else:
                 print("[+]The session ID is invalid")
     
-    def add_member(self):
+    def add_member(self): #adds new member
         print("\n[+]Let's add a new member ---")
         mem_id = self.generate_member_id()
         
         # Get first name
         while True:
-            first_name = input("[+]Enter your first name: ").strip()
+            first_name = input("[+]Enter your first name: ").strip()#prompts user for first name
             if first_name.isalpha():
                 break
             print("[+]Error 1008: invalid name, use alpha char only")
         
-        last_name = input("[+]Enter your last name: ").strip()
-        contact = input("[+]Enter your contact/phone number: ")
+        last_name = input("[+]Enter your last name: ").strip() #promts user for last name
+        contact = input("[+]Enter your contact/phone number: ") #promts user for phone number
         
-        # Get membership type
+        # Asks user for membership type
         while True:
             membership_type = input("[+]Select your membership type (Platinum/Diamond/Gold/Standard) ").strip().title()
             if membership_type in ["Platinum", "Diamond", "Gold", "Standard"]:
                 break
             print("Error 1009: please select one valid membership type")
         
-        # Confirm details
+        # Shows you the imformation you entered so that you can confirm its accurate
         print("\n[+]Please confirm your details:")
         print(f"[+]First Name: {first_name}")
         print(f"[+]Last Name: {last_name}")
@@ -244,6 +244,7 @@ class GymOnTheRock:
         for sid, session in self.sessions.items():
             print(f"[+][{sid}] {session.name} (${session.cost})")
 
+        #gives you the option to create new session or update existing on
         user_prompt = input("\n1. Enter 1 to add new \n2. Enter 2 to update existing sessions: ").strip()
         
         if user_prompt == "1":
@@ -280,7 +281,8 @@ class GymOnTheRock:
                 print("[+]Your session has been updated ")
             else:
                 print("Error 1010: Invalid session ID")
-    
+
+    # creates a report with useful information
     def generate_reports(self):
         print("[+]Welcome to Sys reports")
         
